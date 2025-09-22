@@ -150,7 +150,7 @@ diff dev.yaml prod.yaml
 
 ## Why This Approach Works
 
-This chart embodies the principles outlined in ["Scaling Up: Why Your Cloud Run Deployments Need Helm"](https://stamak.github.io/2025/CloudRunAndHelm/):
+This chart embodies the principles outlined in ["Scaling Up: Why Your Cloud Run Deployments Need Helm"](https://stamak.github.io/2025/09/21/CloudRunAndHelm.html):
 
 - **Single Source of Truth**: All configuration in version-controlled files
 - **Template Reusability**: One chart, multiple environments
@@ -164,4 +164,4 @@ This chart embodies the principles outlined in ["Scaling Up: Why Your Cloud Run 
 3. Test your changes with `helm template`
 4. Submit a pull request
 
-For more context on why this approach is beneficial, read the full blog post: [Scaling Up: Why Your Cloud Run Deployments Need Helm](https://stamak.github.io/2025/CloudRunAndHelm/).
+For more context on why this approach is beneficial, read the full blog post: [Scaling Up: Why Your Cloud Run Deployments Need Helm](https://stamak.github.io/2025/09/21/CloudRunAndHelm.html).
