@@ -32,12 +32,6 @@ spec:
               value: {{ $value | quote }}
           {{- end }}
 
-            # Secrets from .Values.secrets
-          {{- range $key, $value := .Values.secrets }}
-            - name: {{ $key | quote }}
-              value: {{ $value | quote }}
-          {{- end }}
-
             # GCP Secrets from .Values.gcp_secrets
           {{- range $envVarName, $secretRef := .Values.gcp_secrets }}
             - name: {{ $envVarName | quote }}

@@ -15,11 +15,6 @@ image:
 env:
   NODE_ENV: "production"
 
-secrets: {}
-  # This is for setting up secrets for the application.
-  # Example:
-  # SECRET_KEY: secret_value
-
 gcp_secrets: {}
   # SECRET_KEY:
   #   name: my-secret
