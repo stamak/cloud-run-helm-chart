@@ -1,0 +1,51 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: {{ .Values.appName | quote }}
+  annotations:
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale:  {{ .Values.maxScale | default 10 | quote }}
+        run.googleapis.com/network-interfaces: '[{"network":"default","subnetwork":"my-default-dev-us-east4-priv-0"}]'
+        run.googleapis.com/vpc-access-egress: all-traffic
+        run.googleapis.com/cpu-throttling: 'true'
+      labels:
+        cloud.googleapis.com/location:  {{ .Values.region | quote }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccountName | quote }}
+      containers:
+        - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          ports:
+            - containerPort:  {{ .Values.service.port | default 8000 }}
+          resources:
+          {{- if .Values.resources }}
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- else }}
+          {{- end }}
+          env:
+            # Literal environment variables from .Values.env
+          {{- range $key, $value := .Values.env }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+          {{- end }}
+
+            # Secrets from .Values.secrets
+          {{- range $key, $value := .Values.secrets }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+          {{- end }}
+
+            # GCP Secrets from .Values.gcp_secrets
+          {{- range $envVarName, $secretRef := .Values.gcp_secrets }}
+            - name: {{ $envVarName | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretRef.name | quote }}
+                  key: {{ $secretRef.version | default "latest" | quote }} # Default to 'latest' if not specified
+          {{- end }}
+
+      containerConcurrency: {{ .Values.concurrency }}
+      timeoutSeconds: {{ .Values.timeoutSeconds }}
